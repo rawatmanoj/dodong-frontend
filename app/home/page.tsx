@@ -6,9 +6,15 @@ import { BiBookmark } from "react-icons/bi";
 import { TbMessage, TbLink } from "react-icons/tb";
 import { SlOptionsVertical } from "react-icons/sl";
 import { HiArrowLongRight } from "react-icons/hi2";
-import { TRENDING_CONTENT, POSTS_CONTENT } from "@/lib/constants";
+import {
+  TRENDING_CONTENT,
+  POSTS_CONTENT,
+  LOCAL_MARKET_CONTENT,
+} from "@/lib/constants";
 import Image from "next/image";
-import { SubHeading } from "@/components/texts";
+import { Heading } from "@/components/texts";
+import Link from "next/link";
+import Statuses from "@/components/status";
 
 type TrendingProps = {
   name: string;
@@ -17,6 +23,17 @@ type TrendingProps = {
   id: string;
   distance: string;
   imageURL: string;
+  liked: boolean;
+};
+
+type LocalMarketProps = {
+  name: string;
+  designation: string;
+  company: string;
+  id: string;
+  distance: string;
+  imageURL: string;
+  location: string;
   liked: boolean;
 };
 
@@ -45,14 +62,15 @@ function HomePage() {
     return (
       <div className="my-5 bg-trending-background rounded-md" id={post.id}>
         <div className="relative">
-          <div className="absolute right-0 z-10 text-trending-icon">
-            <FiHeart className="text-xl m-2" />
+          <div className="absolute right-0 text-trending-icon">
+            <Link href="/#">
+              <FiHeart className="text-xl m-2" />
+            </Link>
           </div>
           <Image
             src={post.imageURL}
             width="250"
             height={100}
-            objectFit="cover"
             alt="post image"
             className="rounded-md border-b-4 border-trending-icon"
           />
@@ -65,8 +83,12 @@ function HomePage() {
           </div>
 
           <div className="flex my-1">
-            <TbMessage className="text-xl text-trending-icon my-auto mr-2" />
-            <TbLink className="text-xl text-trending-icon my-auto mr-2" />
+            <Link href="/#m">
+              <TbMessage className="text-xl text-trending-icon my-auto mr-2" />
+            </Link>
+            <Link href="/#">
+              <TbLink className="text-xl text-trending-icon my-auto mr-2" />
+            </Link>
           </div>
 
           <div className="flex my-1">
@@ -151,7 +173,6 @@ function HomePage() {
           src={data.post.imageURL}
           width="1000"
           height={400}
-          objectFit="cover"
           alt="data.post image"
           className="rounded-xl"
         />
@@ -169,14 +190,13 @@ function HomePage() {
     );
   };
 
-  const _renderLocalMarketProduct = (post: TrendingProps): JSX.Element => {
+  const _renderLocalMarketProduct = (post: LocalMarketProps): JSX.Element => {
     return (
       <div className="my-5 rounded-md" id={post.id}>
         <Image
           src={post.imageURL}
           width="350"
           height={100}
-          objectFit="cover"
           alt="post image"
           className="rounded-md"
         />
@@ -185,7 +205,7 @@ function HomePage() {
 
           <div className="flex my-1">
             <MdLocationOn className="text-lg my-auto" />
-            <div className="text-xs">{post.distance}</div>
+            <div className="text-xs">{post.location}</div>
           </div>
         </div>
       </div>
@@ -193,30 +213,41 @@ function HomePage() {
   };
 
   return (
-    <div className="container px-2 lg:mx-auto">
+    <div className="px-2 mx-auto align-middle">
       <Header />
 
-      <div className="flex w-full">
+      <div className="flex justify-center mx-auto">
         <section
           id="trending-posts"
-          className="px-2 mr-3 trending-container pr-4"
+          className="px-2 mr-3 lg:h-min lg:sticky lg:top-20 xs:hidden trending-container pr-4"
         >
-          {TRENDING_CONTENT.map((post: TrendingProps) =>
-            _renderTrendingPost(post)
-          )}
+          <div style={{ height: "90vh", overflowY: "scroll" }}>
+            {TRENDING_CONTENT.map((post: TrendingProps) =>
+              _renderTrendingPost(post)
+            )}
+          </div>
         </section>
 
-        <section className="px-2 md:max-w-lg lg:max-w-2xl xl:max-w-3xl" id="posts">
+        <section
+          className="px-2 flex-1 max-w-sm md:max-w-lg lg:max-w-2xl xl:max-w-3xl"
+          id="posts"
+        >
+          <Statuses />
           <div className="flex-1">
             {POSTS_CONTENT.map((post: PostProps) => _renderPosts(post))}
           </div>
         </section>
 
-        <section id="local-market" className="mr-3 local-market-container px-2">
-          <SubHeading title="Local Market" subtitle={""} />
-          {TRENDING_CONTENT.map((post: TrendingProps) =>
-            _renderLocalMarketProduct(post)
-          )}
+        <section
+          id="local-market"
+          className="md:block lg:h-min lg:sticky lg:top-20 xl:max-w-xs xs:hidden px-2"
+        >
+          <div style={{ height: "90vh", overflowY: "scroll" }}>
+            <Heading title="Local Market" subtitle={""} />
+            {LOCAL_MARKET_CONTENT.map((post: LocalMarketProps) =>
+              _renderLocalMarketProduct(post)
+            )}
+          </div>
         </section>
       </div>
     </div>

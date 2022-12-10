@@ -225,6 +225,112 @@ const POSTS_CONTENT = [
   },
 ];
 
-const LOCAL_MARKET_CONTENT = [{}];
+const LOCAL_MARKET_CONTENT = [
+  {
+    name: "Manav Singla",
+    designation: "Brand Ambassador",
+    company: "Ustra",
+    id: "23423",
+    distance: "3.2 km",
+    location: "Delhi",
+    imageURL: "https://picsum.photos/200/100",
+    liked: true,
+  },
+  {
+    name: "Preeti Desai",
+    designation:
+      "Brand Ambassador Brand Ambassador Brand Ambassador Brand Ambassador",
+    company: "Ustra",
+    id: "23423",
+    imageURL: "https://picsum.photos/200/100",
+    distance: "3.2 km",
+    location: "Delhi",
+    liked: true,
+  },
+  {
+    name: "Preeti Desai",
+    designation:
+      "Brand Ambassador Brand Ambassador Brand Ambassador Brand Ambassador",
+    company: "Ustra",
+    id: "23423",
+    imageURL: "https://picsum.photos/200/100",
+    distance: "3.2 km",
+    location: "Delhi",
+    liked: true,
+  },
+  {
+    name: "Preeti Desai",
+    designation:
+      "Brand Ambassador Brand Ambassador Brand Ambassador Brand Ambassador",
+    company: "Ustra",
+    id: "23423",
+    location: "Delhi",
+    imageURL: "https://picsum.photos/200/100",
+    distance: "3.2 km",
+    liked: true,
+  },
+  {
+    name: "Preeti Desai",
+    designation:
+      "Brand Ambassador Brand Ambassador Brand Ambassador Brand Ambassador",
+    company: "Ustra",
+    id: "23423",
+    imageURL: "https://picsum.photos/200/100",
+    distance: "3.2 km",
+    liked: true,
+    location: "Delhi",
+  },
+  {
+    name: "Preeti Desai",
+    designation:
+      "Brand Ambassador Brand Ambassador Brand Ambassador Brand Ambassador",
+    company: "Ustra",
+    id: "23423",
+    imageURL: "https://picsum.photos/200/100",
+    distance: "3.2 km",
+    location: "Delhi",
+    liked: true,
+  },
+  {
+    name: "Arup Dhodi",
+    designation: "Brand Ambassador",
+    company: "Ustra",
+    id: "23423",
+    imageURL: "https://picsum.photos/200/100",
+    distance: "3.2 km",
+    liked: true,
+    location: "Delhi",
+  },
+  {
+    name: "Manav Singla",
+    designation: "Brand Ambassador",
+    company: "Ustra",
+    imageURL: "https://picsum.photos/200/100",
+    id: "23423",
+    distance: "3.2 km",
+    liked: true,
+    location: "Delhi",
+  },
+  {
+    name: "Manav Singla",
+    designation: "Brand Ambassador",
+    company: "Ustra",
+    id: "23423",
+    imageURL: "https://picsum.photos/200/100",
+    distance: "3.2 km",
+    liked: true,
+    location: "Delhi",
+  },
+  {
+    name: "Manav Singla",
+    designation: "Brand Ambassador",
+    company: "Ustra",
+    id: "23423",
+    imageURL: "https://picsum.photos/200/100",
+    distance: "3.2 km",
+    liked: true,
+    location: "Delhi",
+  },
+];
 
 export { TRENDING_CONTENT, POSTS_CONTENT, LOCAL_MARKET_CONTENT };
