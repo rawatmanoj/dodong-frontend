@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-const { colors } = require("tailwindcss/colors")
+const { colors } = require("tailwindcss/colors");
 
 module.exports = {
   content: [
@@ -11,9 +11,7 @@ module.exports = {
     extend: {
       colors: {
         ...colors,
-        darkteal: {
-
-        },
+        darkteal: {},
         orange: {
           50: "#FFF5E6",
           100: "#FFDFB0",
@@ -23,8 +21,8 @@ module.exports = {
           500: "#FF9800",
           600: "#E88A00",
           700: "#B56C00",
-          "CC7A00": "#CC7A00",
-          "593500": "#593500"
+          CC7A00: "#CC7A00",
+          593500: "#593500",
         },
         neutral: {
           50: "#E9EBF8",
@@ -36,9 +34,13 @@ module.exports = {
           600: "#747474",
           700: "#5B5B5B",
         },
-        "734400": "#734400"
-      }
+        734400: "#734400",
+        trending: {
+          background: "#FFF0D9",
+          icon: "#E64A19",
+        },
+      },
     },
   },
   plugins: [],
-}
+};
