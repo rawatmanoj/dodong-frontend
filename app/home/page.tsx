@@ -52,7 +52,6 @@ function HomePage() {
             src={post.imageURL}
             width="250"
             height={100}
-            objectFit="cover"
             alt="post image"
             className="rounded-md border-b-4 border-trending-icon"
           />
