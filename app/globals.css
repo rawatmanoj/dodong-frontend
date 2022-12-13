@@ -19,7 +19,7 @@ a {
   box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   html {
     color-scheme: dark;
   }
@@ -27,4 +27,16 @@ a {
     color: white;
     background: black;
   }
+}
+
+.trending-container {
+  max-width: 16rem;
+}
+
+.posts-container {
+  max-width: 20rem;
+}
+
+.local-market-container {
+  max-width: 20rem;
 }
