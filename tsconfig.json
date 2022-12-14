@@ -19,6 +19,7 @@
       "@/components/*": ["components/*"],
       "@/ui/*": ["ui/*"],
       "@/lib/*": ["lib/*"],
+      "@/images/*": ["/public/images/*"],
     },
     "plugins": [
       {

@@ -34,6 +34,7 @@ module.exports = {
           600: "#747474",
           700: "#5B5B5B",
         },
+        'profile-back': "linear-gradient(180deg, #FFF5E6 0%, #FFFFFF 100%)",
         734400: "#734400",
         trending: {
           background: "#FFF0D9",
@@ -41,6 +42,9 @@ module.exports = {
         },
       },
     },
+    backgroundImage: {
+      'profile-back': "linear-gradient(180deg, #FFF5E6 0%, #FFFFFF 100%)",
+    }
   },
   plugins: [],
 };
