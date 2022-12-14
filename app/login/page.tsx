@@ -1,7 +1,7 @@
 import React from 'react'
 import Image from 'next/image';
 import dodonglogo from "../../public/images/common/dodong-logo.svg";
-import { UserAuthForm } from '@/components/user-auth-form';
+import { UserAuthForm } from '@/components/auth/user-signin-form';
 import { Icons } from '@/components/icons';
 export default function Login() {
   return (
@@ -22,7 +22,7 @@ export default function Login() {
           <h3 className='text-734400 font-bold'>Welcome to DODONG</h3>
             <h4 className='font-normal italic text-orange-CC7A00'>Go online Do dong</h4>
         </header>
-        <main className='w-80'>
+        <main className='w-80 flex flex-col'>
           {/* <Icons.spinner /> */}
           {/* <h5 className='text-orange-593500 font-normal text-sm'>Sign in to your account</h5> */}
           <UserAuthForm />
@@ -62,6 +62,10 @@ export default function Login() {
        
         <Icons.twitter size={30}  />
       </button>
+      </div>
+      <div className='mt-20 place-self-center'>
+          <div className='text-sm text-orange-593500 justify-self-end font-medium'>New to DODONG? <span className='ml-2 text-orange-CC7A00 underline-offset-1'>SIGN UP</span></div>
+          
       </div>
         </main>
     </section>

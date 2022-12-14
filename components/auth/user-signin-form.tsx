@@ -57,9 +57,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         <h5 className='text-orange-593500 font-normal text-sm font-medium'>Sign in to your account</h5>
         <div className="grid gap-2">
           <div className="grid gap-1">
-            <label className="sr-only" htmlFor="email">
-              Email
-            </label>
+          
             <input
               id="email"
               placeholder="name@example.com"
@@ -79,9 +77,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             )} */}
           </div>
           <div className="grid gap-1">
-            <label className="sr-only" htmlFor="email">
-              Email
-            </label>
+           
             <input
               id="email"
               placeholder="Enter password"
@@ -99,7 +95,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 {errors.email.message}
               </p>
             )} */}
+             <div className="text-sm text-orange-593500 justify-self-end font-medium">forgot password</div>
           </div>
+         
           <button
             className="my-0 mx-auto w-2/5 inline-flex w-full items-center justify-center rounded-full bg-orange-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-[#24292F]/90 focus:outline-none focus:ring-4 focus:ring-[#24292F]/50 disabled:opacity-50 dark:hover:bg-[#050708]/30 dark:focus:ring-slate-500"
             disabled={isLoading}
