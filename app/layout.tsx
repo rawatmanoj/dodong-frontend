@@ -1,5 +1,5 @@
 import './globals.css'
-
+import ReactQueryWrapper from '@/components/ReactQueryWrapper'
 export default function RootLayout({
   children,
 }: {
@@ -12,7 +12,11 @@ export default function RootLayout({
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body>{children}</body>
+        <body>
+          <ReactQueryWrapper>
+            {children}
+          </ReactQueryWrapper>
+        </body>
     </html>
   )
 }

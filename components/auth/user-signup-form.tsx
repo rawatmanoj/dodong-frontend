@@ -4,56 +4,50 @@ import * as React from "react"
 import { useSearchParams } from "next/navigation"
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-
 import { cn } from "@/lib/utils"
 import { userAuthSchema } from "@/lib/validations/auth"
 import toast from "@/ui/toast"
 import { Icons } from "@/components/icons"
-
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { postRequest } from "@/lib/networkHelper"
+import { Urls } from "@/lib/apiConstants"
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 type FormData = z.infer<typeof userAuthSchema>
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
+    const mutation = useMutation({
+        mutationFn: data => {
+        return postRequest(Urls.signup,data)
+        }
+      })
+
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const searchParams = useSearchParams();
 
-  async function handleSubmit(data: FormData) {
+  async function handleSubmit(event:any) {
     // setIsLoading(true)
+    event.preventDefault();
+    // console.log(event.target[0].value);
+    console.log(event.target[0].value);
+
+    
 
 
-    // const signInResult = 
-    // await signIn("email", {
-    //   email: data.email.toLowerCase(),
-    //   redirect: false,
-    //   callbackUrl: searchParams.get("from") || "/dashboard",
-    // })
-
-    // setIsLoading(false)
-
-    // if (!signInResult?.ok) {
-    //   return toast({
-    //     title: "Something went wrong.",
-    //     message: "Your post was not saved. Please try again.",
-    //     type: "error",
-    //   })
-    // }
-
-    // return toast({
-    //   title: "Check your email",
-    //   message: "We sent you a login link. Be sure to check your spam too.",
-    //   type: "success",
-    // })
   }
 
   return (
     // <div className={cn("grid gap-6 mt-10", className)} {...props}>
     <div className="grid gap-6">
-      <form onSubmit={(e)=>{
-        e.preventDefault();
-        console.log(e,"dataa")
-      }}>
+      <form 
+    //   onSubmit={(e)=>{
+    //     e.preventDefault();
+    //     console.log(e,"dataa")
+
+    //   }}
+    onSubmit={e=>handleSubmit(e)}
+      >
         <h5 className='text-orange-593500 font-normal text-sm font-medium'>Sign up</h5>
         <div className="grid gap-2">
           <div className="grid gap-1">
@@ -86,7 +80,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoCapitalize="none"
               autoComplete="none"
               autoCorrect="off"
-              name="email"
+              name="password"
               disabled={isLoading}
               //{...register("email")}
             />
@@ -99,14 +93,14 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           <div className="grid gap-1">
            
             <input
-              id="email"
+              id="confirmpassword"
               placeholder="Enter confirm password"
               className="bg-transparent text-734400 my-0 mb-2 block h-9 w-full rounded-md border border-734400 py-2 px-3 text-sm placeholder:text-734400 hover:border-734400 focus:border-734400 focus:outline-none"
               type="password"
               autoCapitalize="none"
               autoComplete="none"
               autoCorrect="off"
-              name="email"
+              name="confirmpassword"
               disabled={isLoading}
               //{...register("email")}
             />
