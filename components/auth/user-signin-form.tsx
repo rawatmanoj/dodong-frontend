@@ -1,63 +1,85 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useSearchParams } from "next/navigation"
-import * as z from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
+import * as React from "react";
+import { useSearchParams } from "next/navigation";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { cn } from "@/lib/utils"
-import { userAuthSchema } from "@/lib/validations/auth"
-import toast from "@/ui/toast"
-import { Icons } from "@/components/icons"
+import { cn } from "@/lib/utils";
+import toast from "react-hot-toast";
+import { Icons } from "@/components/icons";
+import { ZodError } from "zod";
+import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { userSignInSchema } from "@/lib/validations/auth";
+import { postRequest } from "@/lib/networkHelper";
+import { Urls } from "@/lib/apiConstants";
+import axios from "axios";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-type FormData = z.infer<typeof userAuthSchema>
+type userSignInSchema = z.infer<typeof userSignInSchema>;
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-
-  const [isLoading, setIsLoading] = React.useState<boolean>(false)
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const searchParams = useSearchParams();
 
-  async function handleSubmit(data: FormData) {
-    // setIsLoading(true)
+  const router = useRouter();
+  const mutation = useMutation({
+    mutationFn: (data: userSignInSchema) => {
+      return postRequest(Urls.login, data);
+    },
+    onSuccess: (data) => {
+      console.log(data, "returned data");
+      localStorage.setItem("token", data.data.Authorization);
+      // toast('Here is your toast.')
+      router.push("/");
+      console.log(data);
+    },
 
+    onError: (error: any) => {
+      if (axios.isAxiosError(error)) {
+        console.log(error);
+        return toast(error.response?.data.message);
+      }
+      if (error instanceof ZodError) {
+        console.log(error.flatten(), "error");
+        return toast("Please valid data");
+      }
+    },
+  });
 
-    // const signInResult = 
-    // await signIn("email", {
-    //   email: data.email.toLowerCase(),
-    //   redirect: false,
-    //   callbackUrl: searchParams.get("from") || "/dashboard",
-    // })
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): any => {
+    event.preventDefault();
+    try {
+      const data = {
+        email: (event.target as HTMLFormElement).email.value,
+        password: (event.target as HTMLFormElement).password.value,
+      };
 
-    // setIsLoading(false)
+      if (!data.email || !data.password) {
+        toast("Please enter all the fields");
+        return;
+      }
 
-    // if (!signInResult?.ok) {
-    //   return toast({
-    //     title: "Something went wrong.",
-    //     message: "Your post was not saved. Please try again.",
-    //     type: "error",
-    //   })
-    // }
-
-    // return toast({
-    //   title: "Check your email",
-    //   message: "We sent you a login link. Be sure to check your spam too.",
-    //   type: "success",
-    // })
-  }
+      const isValidData = userSignInSchema.parse(data);
+      mutation.mutate(isValidData);
+    } catch (error: any) {
+      console.log(error);
+      // console.log((error as ZodError).format())
+      // error.flatten().formErrors.length > 0 && toast(error.flatten().formErrors[0])
+    }
+  };
 
   return (
     // <div className={cn("grid gap-6 mt-10", className)} {...props}>
     <div className="grid gap-6">
-      <form onSubmit={(e)=>{
-        e.preventDefault();
-        console.log(e,"dataa")
-      }}>
-        <h5 className='text-orange-593500 font-normal text-sm font-medium'>Sign in to your account</h5>
+      <form onSubmit={handleSubmit}>
+        <h5 className="text-orange-593500 font-normal text-sm font-medium">
+          Sign in to your account
+        </h5>
         <div className="grid gap-2">
           <div className="grid gap-1">
-          
             <input
               id="email"
               placeholder="name@example.com"
@@ -77,16 +99,15 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             )} */}
           </div>
           <div className="grid gap-1">
-           
             <input
-              id="email"
+              id="password"
               placeholder="Enter password"
               className="bg-transparent text-734400 my-0 mb-2 block h-9 w-full rounded-md border border-734400 py-2 px-3 text-sm placeholder:text-734400 hover:border-734400 focus:border-734400 focus:outline-none"
               type="password"
               autoCapitalize="none"
-              autoComplete="email"
+              autoComplete="password"
               autoCorrect="off"
-              name="email"
+              name="password"
               disabled={isLoading}
               //{...register("email")}
             />
@@ -95,9 +116,11 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 {errors.email.message}
               </p>
             )} */}
-             <div className="text-sm text-orange-593500 justify-self-end font-medium">forgot password</div>
+            <div className="text-sm text-orange-593500 justify-self-end font-medium">
+              forgot password
+            </div>
           </div>
-         
+
           <button
             className="my-0 mx-auto w-2/5 inline-flex w-full items-center justify-center rounded-full bg-orange-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-[#24292F]/90 focus:outline-none focus:ring-4 focus:ring-[#24292F]/50 disabled:opacity-50 dark:hover:bg-[#050708]/30 dark:focus:ring-slate-500"
             disabled={isLoading}
@@ -105,11 +128,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Sign In 
+            Sign In
           </button>
         </div>
       </form>
-     
     </div>
-  )
+  );
 }

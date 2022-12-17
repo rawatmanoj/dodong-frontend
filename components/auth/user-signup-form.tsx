@@ -5,48 +5,77 @@ import { useSearchParams } from "next/navigation"
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { cn } from "@/lib/utils"
-import { userAuthSchema } from "@/lib/validations/auth"
-import toast from "@/ui/toast"
+import {  userSignUpSchema } from "@/lib/validations/auth"
+// import {toast} from "@/ui/toast"
 import { Icons } from "@/components/icons"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { postRequest } from "@/lib/networkHelper"
 import { Urls } from "@/lib/apiConstants"
+import { ZodError } from "zod";
+import axios from "axios";
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation'
+
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-type FormData = z.infer<typeof userAuthSchema>
-
+type userSignUpSchema = z.infer<typeof userSignUpSchema>;
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-
+    const router = useRouter()
     const mutation = useMutation({
-        mutationFn: data => {
-        return postRequest(Urls.signup,data)
+        mutationFn: (data:userSignUpSchema) => {
+            return postRequest(Urls.signup,data);
+        },
+        onSuccess:(data)=>{
+            console.log(data,"returned data");
+            // toast('Here is your toast.')
+            router.push('/login')
+    },
+
+    onError:(error:any)=>{
+        if(axios.isAxiosError(error)){
+            console.log(error)
+            return toast(error.response?.data.message)
         }
+        if(error instanceof ZodError){
+            console.log(error.flatten(),"error")
+            return toast("Please valid data")
+        }
+    }
       })
+    
+      const handleSubmit = (event:React.FormEvent<HTMLFormElement>):any => {
+        event.preventDefault();
+    try {
+        const data = {
+            email:(event.target as HTMLFormElement).email.value,
+            password:(event.target as HTMLFormElement).password.value,
+            confirmPassword:(event.target as HTMLFormElement).confirmPassword.value,
+            isPhoneNumberConfirmed:false,
+            isEmailConfirmed:false
+        }
+
+        if(!data.email || !data.password || !data.confirmPassword){
+        toast('Please enter all the fields');
+        return
+        }        
+
+        const isValidData = userSignUpSchema.parse(data);
+        mutation.mutate(isValidData);
+        
+    } catch (error:any) {
+        console.log((error as ZodError).format())
+        error.flatten().formErrors.length > 0 && toast(error.flatten().formErrors[0])
+    }
+       
+       }
 
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const searchParams = useSearchParams();
 
-  async function handleSubmit(event:any) {
-    // setIsLoading(true)
-    event.preventDefault();
-    // console.log(event.target[0].value);
-    console.log(event.target[0].value);
-
-    
-
-
-  }
 
   return (
-    // <div className={cn("grid gap-6 mt-10", className)} {...props}>
     <div className="grid gap-6">
       <form 
-    //   onSubmit={(e)=>{
-    //     e.preventDefault();
-    //     console.log(e,"dataa")
-
-    //   }}
-    onSubmit={e=>handleSubmit(e)}
+       onSubmit={handleSubmit}
       >
         <h5 className='text-orange-593500 font-normal text-sm font-medium'>Sign up</h5>
         <div className="grid gap-2">
@@ -62,18 +91,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoCorrect="off"
               name="email"
               disabled={isLoading}
-              //{...register("email")}
             />
-            {/* {errors?.email && (
-              <p className="px-1 text-xs text-red-600">
-                {errors.email.message}
-              </p>
-            )} */}
           </div>
           <div className="grid gap-1">
            
             <input
-              id="email"
+              id="password"
               placeholder="Enter password"
               className="bg-transparent text-734400 my-0 mb-2 block h-9 w-full rounded-md border border-734400 py-2 px-3 text-sm placeholder:text-734400 hover:border-734400 focus:border-734400 focus:outline-none"
               type="password"
@@ -82,33 +105,22 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoCorrect="off"
               name="password"
               disabled={isLoading}
-              //{...register("email")}
+              
             />
-            {/* {errors?.email && (
-              <p className="px-1 text-xs text-red-600">
-                {errors.email.message}
-              </p>
-            )} */}
           </div>
           <div className="grid gap-1">
            
             <input
-              id="confirmpassword"
+              id="confirmPassword"
               placeholder="Enter confirm password"
               className="bg-transparent text-734400 my-0 mb-2 block h-9 w-full rounded-md border border-734400 py-2 px-3 text-sm placeholder:text-734400 hover:border-734400 focus:border-734400 focus:outline-none"
               type="password"
               autoCapitalize="none"
               autoComplete="none"
               autoCorrect="off"
-              name="confirmpassword"
-              disabled={isLoading}
-              //{...register("email")}
+              name="confirmPassword"
+              disabled={isLoading}        
             />
-            {/* {errors?.email && (
-              <p className="px-1 text-xs text-red-600">
-                {errors.email.message}
-              </p>
-            )} */}
           </div>
          
           <button

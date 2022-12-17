@@ -9,16 +9,19 @@ import { Icons } from "@/components/icons"
 export const Toaster = HotToaster
 
 interface ToastProps extends React.HTMLAttributes<HTMLDivElement> {
-  visible: boolean
+  visible: boolean,
+  type:"error" | "success" | "default"
 }
 
-export function Toast({ visible, className, ...props }: ToastProps) {
+export function Toast({ visible, className,type, ...props }: ToastProps) {
+  console.log(className,type,"clasnamew")
   return (
     <div
+      style={{padding:"8px"}}
       className={cn(
-        "min-h-16 mb-2 flex w-[350px] flex-col items-start gap-1 rounded-md bg-white px-6 py-4 shadow-lg",
-        visible && "animate-in slide-in-from-bottom-5",
-        className
+        "min-h-16 flex w-[350px] flex-col items-start bg-black-500  rounded-md shadow-lg",
+        visible && "animate-in slide-in-from-bottom-5 ",
+        type==="success" && "text-black bg-red-500",
       )}
       {...props}
     />
@@ -66,19 +69,20 @@ interface ToastOpts {
   duration?: number
 }
 
-export default function toast(opts: ToastOpts) {
-  const { title, message, type = "default", duration = 3000 } = opts
+export function toast(opts: ToastOpts) {
+  const { title, message, type = "default", duration = 900000 } = opts;
 
-  // alert(message)
+  console.log(title,"title")
 
   return hotToast.custom(
     ({ visible }) => (
       <Toast
         visible={visible}
         className={cn({
-          "bg-red-600 text-white": type === "error",
-          "bg-black text-white": type === "success",
+          // "bg-red-500 text-white": type === "error",
+          // "bg-neutral-900 text-white": type === "success",
         })}
+        type={type}
       >
         <Toast.Title>{title}</Toast.Title>
         {message && <Toast.Description>{message}</Toast.Description>}

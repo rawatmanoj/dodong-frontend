@@ -31,7 +31,7 @@ error=>{
 
 export const postRequest = (url:string,data:any)=>{
         return axiosInstance({
-            method:"get",
+            method:"post",
             url,
             data,
             headers:{

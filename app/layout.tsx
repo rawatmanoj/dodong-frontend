@@ -1,5 +1,6 @@
 import './globals.css'
 import ReactQueryWrapper from '@/components/ReactQueryWrapper'
+import { Toaster } from "@/ui/toast"
 export default function RootLayout({
   children,
 }: {
@@ -16,6 +17,7 @@ export default function RootLayout({
           <ReactQueryWrapper>
             {children}
           </ReactQueryWrapper>
+            <Toaster  position="bottom-right"  />
         </body>
     </html>
   )
