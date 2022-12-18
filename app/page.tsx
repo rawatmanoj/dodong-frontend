@@ -1,11 +1,12 @@
+"use client";
+
 import React from "react";
 import Header from "@/components/header";
+import Post from "@/components/post";
+
 import { MdLocationOn } from "react-icons/md";
 import { FiHeart } from "react-icons/fi";
-import { BiBookmark } from "react-icons/bi";
 import { TbMessage, TbLink } from "react-icons/tb";
-import { SlOptionsVertical } from "react-icons/sl";
-import { HiArrowLongRight } from "react-icons/hi2";
 import {
   TRENDING_CONTENT,
   POSTS_CONTENT,
@@ -15,6 +16,7 @@ import Image from "next/image";
 import { Heading } from "@/components/texts";
 import Link from "next/link";
 import Statuses from "@/components/status";
+import { PostProps } from "@/components/post/types";
 
 type TrendingProps = {
   name: string;
@@ -37,26 +39,6 @@ type LocalMarketProps = {
   liked: boolean;
 };
 
-type PostProps = {
-  profile: {
-    name: string;
-    followers: string;
-    following: string;
-    imageURL: string;
-    distance: string;
-    id: string;
-  };
-  shopURL: string;
-  post: {
-    imageURL: string;
-    description: string;
-    liked: boolean;
-    likes: string;
-    comments: string;
-    shares: string;
-  };
-  liked: boolean;
-};
 function HomePage() {
   const _renderTrendingPost = (post: TrendingProps): JSX.Element => {
     return (
@@ -69,10 +51,10 @@ function HomePage() {
           </div>
           <Image
             src={post.imageURL}
-            width="250"
-            height={100}
-            alt="post image"
-            className="rounded-md border-b-4 border-trending-icon"
+            width="1000"
+            height={400}
+            alt="data.post image"
+            className="rounded-xl"
           />
         </div>
         <div className="text-gray-800 p-2">
@@ -102,105 +84,17 @@ function HomePage() {
     );
   };
 
-  const _renderPosts = (data: PostProps): JSX.Element => {
-    const stats = [
-      {
-        label: "Posts",
-        value: data.profile.followers,
-      },
-      {
-        label: "Connects",
-        value: data.profile.followers,
-      },
-      {
-        label: "Connecting",
-        value: data.profile.followers,
-      },
-    ];
+  const _renderLocalMarketProduct = (post: LocalMarketProps): JSX.Element => {
     return (
-      <div className="my-5 rounded-lg" id={data.post.shares}>
-        {/* Profile section */}
-
-        <div className="flex justify-between mb-4">
-          <div className="flex items-center">
-            <div className="relative">
-              <Image
-                src={data.profile.imageURL}
-                width="50"
-                height={50}
-                objectFit="cover"
-                alt="profile image"
-                className="rounded-full"
-              />
-            </div>
-            <div className="flex flex-col ml-2">
-              <div className="text-sm font-bold truncate">
-                {data.profile.name}
-              </div>
-              <div className="text-xs flex truncate">
-                <MdLocationOn className="text-md my-auto cursor-pointer mr-2" />{" "}
-                {data.profile.distance}
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center">
-            {stats.map((stat, k) => (
-              <div key={`stat_${k}`} className="flex flex-col mx-4">
-                <div className="text-sm font-bold text-center truncate">
-                  {stat.value}
-                </div>
-                <div className="text-xs truncate">{stat.label}</div>
-              </div>
-            ))}
-
-            <div className="flex flex-col ml-2">
-              <div className="text-sm font-bold text-center truncate">
-                <BiBookmark className="text-xl text-orange-500 cursor-pointer" />
-              </div>
-            </div>
-
-            <div className="flex flex-col ml-4">
-              <div className="text-sm font-bold text-center truncate">
-                <SlOptionsVertical className="text-xl text-orange-500 cursor-pointer" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Post */}
+      <div className="my-5 px-2 rounded-md mx-auto" id={post.id}>
         <Image
-          src={data.post.imageURL}
-          width="1000"
-          height={400}
+          src={post.imageURL}
+          height={200}
+          width={200}
           alt="data.post image"
           className="rounded-xl"
         />
-        <div className="text-gray-800 p-2">
-          <div className="text-sm truncate">{data.post.description}</div>
-
-          <div className="flex my-1 font-normal text-orange-500">
-            <div className="text-xs">View Comments</div>
-            <HiArrowLongRight className="text-lg my-auto mx-3" />
-          </div>
-
-          <div>{data.post.liked}</div>
-        </div>
-      </div>
-    );
-  };
-
-  const _renderLocalMarketProduct = (post: LocalMarketProps): JSX.Element => {
-    return (
-      <div className="my-5 rounded-md" id={post.id}>
-        <Image
-          src={post.imageURL}
-          width="350"
-          height={100}
-          alt="post image"
-          className="rounded-md"
-        />
-        <div className="text-gray-800 p-2">
+        <div className="text-gray-800 m-2">
           <div className="text-sm font-bold truncate">{post.name}</div>
 
           <div className="flex my-1">
@@ -213,42 +107,45 @@ function HomePage() {
   };
 
   return (
-    <div className="px-2 mx-auto align-middle">
+    <div>
       <Header />
+      <div className="mx-auto align-middle">
+        <div className="grid md:flex px-2 justify-center mx-auto">
+          <section
+            id="trending-posts"
+            className="hidden lg:block mr-3 lg:h-min lg:sticky lg:top-20 xs:hidden trending-container pr-4"
+          >
+            <div className="overflow-y-scroll px-2" style={{ height: "90vh" }}>
+              {TRENDING_CONTENT.map((post: TrendingProps) =>
+                _renderTrendingPost(post)
+              )}
+            </div>
+          </section>
 
-      <div className="flex justify-center mx-auto">
-        <section
-          id="trending-posts"
-          className="px-2 mr-3 lg:h-min lg:sticky lg:top-20 xs:hidden trending-container pr-4"
-        >
-          <div style={{ height: "90vh", overflowY: "scroll" }}>
-            {TRENDING_CONTENT.map((post: TrendingProps) =>
-              _renderTrendingPost(post)
-            )}
-          </div>
-        </section>
+          <section
+            className="flex-1 max-w-full md:max-w-xl lg:max-w-2xl xl:max-w-4xl"
+            id="posts"
+          >
+            <Statuses />
+            <div className="flex-1">
+              {POSTS_CONTENT.map((post: PostProps, k: number) => (
+                <Post key={k} post={post} />
+              ))}
+            </div>
+          </section>
 
-        <section
-          className="px-2 flex-1 max-w-sm md:max-w-lg lg:max-w-2xl xl:max-w-3xl"
-          id="posts"
-        >
-          <Statuses />
-          <div className="flex-1">
-            {POSTS_CONTENT.map((post: PostProps) => _renderPosts(post))}
-          </div>
-        </section>
-
-        <section
-          id="local-market"
-          className="md:block lg:h-min lg:sticky lg:top-20 xl:max-w-xs xs:hidden px-2"
-        >
-          <div style={{ height: "90vh", overflowY: "scroll" }}>
-            <Heading title="Local Market" icon={<></>} />
-            {LOCAL_MARKET_CONTENT.map((post: LocalMarketProps) =>
-              _renderLocalMarketProduct(post)
-            )}
-          </div>
-        </section>
+          <section
+            id="local-market"
+            className="md:block lg:h-min lg:sticky lg:overflow-y-scroll lg:top-20 xl:max-w-xs xs:hidden px-2"
+          >
+            <div style={{ height: "90vh" }}>
+              <Heading title="Local Market" icon={<></>} />
+              {LOCAL_MARKET_CONTENT.map((post: LocalMarketProps) =>
+                _renderLocalMarketProduct(post)
+              )}
+            </div>
+          </section>
+        </div>
       </div>
     </div>
   );
