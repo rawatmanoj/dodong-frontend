@@ -3,11 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { BiBookmark } from "react-icons/bi";
-import { FiHeart } from "react-icons/fi";
+import { BsArrowUpRightCircle } from "react-icons/bs";
 import { HiArrowLongRight } from "react-icons/hi2";
 import { MdLocationOn } from "react-icons/md";
 import { SlOptionsVertical } from "react-icons/sl";
+import { TbMessage } from "react-icons/tb";
 import { PostProps } from "./types";
 
 const Post = ({ post }: { post: PostProps }): JSX.Element => {
@@ -28,6 +30,50 @@ const Post = ({ post }: { post: PostProps }): JSX.Element => {
       value: post.profile.followers,
     },
   ];
+
+  const postActions = [
+    {
+      label: "Like",
+      value: likes,
+      icon: liked ? (
+        <AiFillHeart
+          className="text-2xl text-white cursor-pointer mr-1"
+          onClick={() => {
+            setLiked(!liked);
+            setLikes(liked ? likes - 1 : likes + 1);
+          }}
+        />
+      ) : (
+        <AiOutlineHeart
+          className="text-2xl text-white cursor-pointer mr-1"
+          onClick={() => {
+            setLiked(!liked);
+            setLikes(liked ? likes - 1 : likes + 1);
+          }}
+        />
+      ),
+    },
+    {
+      label: "Comment",
+      value: comments,
+      icon: (
+        <TbMessage
+          className="text-2xl text-white cursor-pointer mr-1"
+          onClick={() => {
+            setComments(comments + 1);
+          }}
+        />
+      ),
+    },
+    {
+      label: "Share",
+      value: post.post.shares,
+      icon: (
+        <BsArrowUpRightCircle className="text-2xl text-white cursor-pointer mr-1" />
+      ),
+    },
+  ];
+
   return (
     <div className="my-5 px-2 rounded-lg" id={post.post.shares}>
       {/* Profile section */}
@@ -87,10 +133,19 @@ const Post = ({ post }: { post: PostProps }): JSX.Element => {
           className="rounded-xl"
         />
 
-        <div className="absolute right-0 bottom-0 text-trending-icon">
-          <Link href="/#">
-            <FiHeart className="text-xl m-2" />
-          </Link>
+        {/* likes and comments */}
+        <div className="absolute right-0 bottom-0 text-white">
+          <div className="flex justify-between my-auto px-4 py-3">
+            {/* likes */}
+            {postActions.map((action, k) => (
+              <div key={`action_${k}`} className="flex flex-col mx-2 lg:mx-4">
+                <div className="text-sm flex justify-center font-bold text-center">
+                  {action.icon}
+                  <span className="pl-2">{action.value}</span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       <div className="text-gray-800 p-2">

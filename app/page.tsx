@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Header from "@/components/header";
+
 import Post from "@/components/post";
 
 import { MdLocationOn } from "react-icons/md";
@@ -17,6 +17,11 @@ import { Heading } from "@/components/texts";
 import Link from "next/link";
 import Statuses from "@/components/status";
 import { PostProps } from "@/components/post/types";
+import dynamic from "next/dynamic";
+
+const DynamicHeader = dynamic(() => import("@/components/header"), {
+  ssr: false,
+});
 
 type TrendingProps = {
   name: string;
@@ -108,7 +113,7 @@ function HomePage() {
 
   return (
     <div>
-      <Header />
+      <DynamicHeader />
       <div className="mx-auto align-middle">
         <div className="grid md:flex px-2 justify-center mx-auto">
           <section

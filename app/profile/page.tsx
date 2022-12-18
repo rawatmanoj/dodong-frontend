@@ -118,9 +118,9 @@ function ProfilePage() {
 
     return (
       <div className="mb-4">
-        <div className="flex justify-between">
+        <div className="grid md:flex justify-between">
           <div>
-            <div className="flex items-center mb-6">
+            <div className="grid md:flex items-center mb-3">
               <div className="relative mr-3 my-auto">
                 <Image
                   src={data.imageURL}
@@ -132,52 +132,58 @@ function ProfilePage() {
                 />
               </div>
               <div className="flex flex-col ml-2">
-                <div className="text-sm font-bold truncate">{data.name}</div>
-                <div className="text-sm truncate">{data.dob}</div>
+                <div className="text-xl font-bold">{data.name}</div>
+                <div className="text-sm">{data.dob}</div>
               </div>
             </div>
-          </div>
+            <div>
+              <div className="flex items-center">
+                <div className="flex flex-col ml-2">
+                  <div className="text-sm font-normal truncate">
+                    {data.designation} @ {data.company}
+                  </div>
 
-          <div className="flex items-center">
-            {stats.map((stat, k) => (
-              <div key={`stat_${k}`} className="flex flex-col mx-4">
-                <div className="text-sm font-bold text-center truncate">
-                  {stat.value}
+                  <div className="text-sm font-normal">{data.email}</div>
+                  <div className="text-sm">{data.bio}</div>
                 </div>
-                <div className="text-xs truncate">{stat.name}</div>
               </div>
-            ))}
-
-            <div className="flex flex-col ml-2">
-              <button className="text-sm flex border text-orange-500 border-orange-500 rounded-full p-2 font-bold text-center">
-                <RxEnvelopeClosed className="text-md my-auto cursor-pointer mx-2" />{" "}
-                <span className="text-md px-2">Message</span>
-              </button>
-            </div>
-
-            <div className="flex flex-col ml-2">
-              <button className="text-sm font-bold border text-orange-500 border-orange-500 rounded-full p-2 text-center">
-                {/* Share */}
-                <FiLink2 className="text-md my-auto cursor-pointer mx-3" />
-              </button>
-            </div>
-
-            <div className="flex flex-col ml-4">
-              <button className="flex text-sm font-bold border text-orange-500 border-orange-500 rounded-full p-2 text-center">
-                <RiPencilFill className="text-md my-auto cursor-pointer mx-2" />{" "}
-                <span className="text-md px-2">Edit Profile</span>
-              </button>
             </div>
           </div>
-        </div>
-        <div className="flex items-center">
-          <div className="flex flex-col ml-2">
-            <div className="text-sm font-normal truncate">
-              {data.designation} @ {data.company}
+
+          <div className="grid md:flex items-start">
+            <div className="flex my-2 items-center">
+              {stats.map((stat, k) => (
+                <div key={`stat_${k}`} className="flex flex-col mx-4">
+                  <div className="text-sm font-bold text-center truncate">
+                    {stat.value}
+                  </div>
+                  <div className="text-xs truncate">{stat.name}</div>
+                </div>
+              ))}
             </div>
 
-            <div className="text-sm font-normal">{data.email}</div>
-            <div className="text-sm">{data.bio}</div>
+            <div className="flex my-2 justify-around items-center">
+              <div className="flex flex-col ml-2">
+                <button className="text-sm flex border text-orange-500 border-orange-500 rounded-full p-2 font-bold text-center">
+                  <RxEnvelopeClosed className="text-md my-auto cursor-pointer mx-2" />{" "}
+                  <span className="text-md px-2">Message</span>
+                </button>
+              </div>
+
+              <div className="flex flex-col ml-2">
+                <button className="text-sm font-bold border text-orange-500 border-orange-500 rounded-full p-2 text-center">
+                  {/* Share */}
+                  <FiLink2 className="text-md my-auto cursor-pointer mx-3" />
+                </button>
+              </div>
+
+              <div className="flex flex-col ml-4">
+                <button className="flex text-sm font-bold border text-orange-500 border-orange-500 rounded-full p-2 text-center">
+                  <RiPencilFill className="text-md my-auto cursor-pointer mx-2" />{" "}
+                  <span className="text-md px-2">Edit Profile</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -186,11 +192,11 @@ function ProfilePage() {
 
   const _renderPost = (image: string): JSX.Element => {
     return (
-      <div className="my-5 rounded-lg" id={image}>
+      <div className="my-5 w-auto flex-shrink-0 rounded-lg" id={image}>
         <Image
           src={image}
-          width={400}
-          height={400}
+          width={150}
+          height={100}
           objectFit={"contain"}
           alt="image"
           className="rounded-md"
@@ -200,55 +206,56 @@ function ProfilePage() {
   };
 
   return (
-    <div className="px-2 lg:px-6 mx-auto align-middle">
+    <div>
       <Header />
-
-      <div className="flex justify-center mx-auto">
-        {/* TODO: Convert this to reusable layout component */}
-        <section
-          id="trending-posts"
-          className="px-2 mr-3 lg:h-min lg:sticky lg:top-20 xs:hidden trending-container pr-4"
-        >
-          <div style={{ height: "90vh", overflowY: "scroll" }}>
-            {TRENDING_CONTENT.map((post: TrendingProps) =>
-              _renderTrendingPost(post)
-            )}
-          </div>
-        </section>
-
-        <section className="px-2 flex-1 container" id="posts">
-          {_renderProfile()}
-
-          <div className="flex-1">
-            <Heading title="Posts" icon={<BsGrid3X3 className="text-lg" />} />
-
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5 mb-5">
-              {PROFILE_POSTS.posts.map((post: string) => _renderPost(post))}
-            </div>
-
-            <Heading
-              title="Discoveries"
-              icon={<BsGrid3X3 className="text-lg" />}
-            />
-
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5 mb-5">
-              {PROFILE_POSTS.discoveries.map((post: string) =>
-                _renderPost(post)
+      <div className="mx-auto align-middle">
+        <div className="flex justify-center mx-auto">
+          {/* TODO: Convert this to reusable layout component */}
+          <section
+            id="trending-posts"
+            className="hidden lg:block mr-3 lg:h-min lg:sticky lg:top-20 xs:hidden trending-container pr-4"
+          >
+            <div style={{ height: "90vh", overflowY: "scroll" }}>
+              {TRENDING_CONTENT.map((post: TrendingProps) =>
+                _renderTrendingPost(post)
               )}
             </div>
+          </section>
 
-            <Heading
-              title="Collections"
-              icon={<BsGrid3X3 className="text-lg" />}
-            />
+          <section className="px-2 flex-1 container" id="posts">
+            {_renderProfile()}
 
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-5 mb-5">
-              {PROFILE_POSTS.discoveries.map((post: string) =>
-                _renderPost(post)
-              )}
+            <div className="flex-1">
+              <Heading title="Posts" icon={<BsGrid3X3 className="text-lg" />} />
+
+              <div className="flex overflow-x-scroll gap-5 mb-5">
+                {PROFILE_POSTS.posts.map((post: string) => _renderPost(post))}
+              </div>
+
+              <Heading
+                title="Discoveries"
+                icon={<BsGrid3X3 className="text-lg" />}
+              />
+
+              <div className="flex overflow-x-scroll gap-5 mb-5">
+                {PROFILE_POSTS.discoveries.map((post: string) =>
+                  _renderPost(post)
+                )}
+              </div>
+
+              <Heading
+                title="Collections"
+                icon={<BsGrid3X3 className="text-lg" />}
+              />
+
+              <div className="flex overflow-x-scroll gap-5 mb-5">
+                {PROFILE_POSTS.discoveries.map((post: string) =>
+                  _renderPost(post)
+                )}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </div>
     </div>
   );
