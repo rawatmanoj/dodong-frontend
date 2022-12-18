@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image';
-import dodonglogo from "../../public/images/common/dodong-logo.svg";
+import dodongLogo from "../../public/images/common/dodong-logo.svg";
 import { UserAuthForm } from '@/components/auth/user-signup-form';
 import { Icons } from '@/components/icons';
 export default function Login() {
@@ -9,7 +9,7 @@ export default function Login() {
 
           <figure className='mb-10'>
             <Image
-                src={dodonglogo}
+                src={dodongLogo}
                 alt="Picture of the author"
                 width={307} 
                 height={307}

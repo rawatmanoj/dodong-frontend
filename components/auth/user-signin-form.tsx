@@ -75,7 +75,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     // <div className={cn("grid gap-6 mt-10", className)} {...props}>
     <div className="grid gap-6">
       <form onSubmit={handleSubmit}>
-        <h5 className="text-orange-593500 font-normal text-sm font-medium">
+        <h5 className="text-orange-593500 text-sm font-medium">
           Sign in to your account
         </h5>
         <div className="grid gap-2">
