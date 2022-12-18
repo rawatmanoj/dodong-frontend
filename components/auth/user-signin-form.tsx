@@ -1,11 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useSearchParams } from "next/navigation";
 import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import { cn } from "@/lib/utils";
 import toast from "react-hot-toast";
 import { Icons } from "@/components/icons";
 import { ZodError } from "zod";
@@ -15,15 +11,18 @@ import { userSignInSchema } from "@/lib/validations/auth";
 import { postRequest } from "@/lib/networkHelper";
 import { Urls } from "@/lib/apiConstants";
 import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  deleteToken,
+  saveToken,
+} from "@/lib/redux/store/reducers/saveTokenReducer";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 type userSignInSchema = z.infer<typeof userSignInSchema>;
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const searchParams = useSearchParams();
-
+  const dispatch = useDispatch();
   const router = useRouter();
   const mutation = useMutation({
     mutationFn: (data: userSignInSchema) => {
@@ -32,9 +31,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     onSuccess: (data) => {
       console.log(data, "returned data");
       localStorage.setItem("token", data.data.Authorization);
-      // toast('Here is your toast.')
+      dispatch(saveToken(data.data.Authorization));
       router.push("/");
-      console.log(data);
     },
 
     onError: (error: any) => {
@@ -89,14 +87,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoComplete="email"
               autoCorrect="off"
               name="email"
-              disabled={isLoading}
-              //{...register("email")}
             />
-            {/* {errors?.email && (
-              <p className="px-1 text-xs text-red-600">
-                {errors.email.message}
-              </p>
-            )} */}
           </div>
           <div className="grid gap-1">
             <input
@@ -108,26 +99,16 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               autoComplete="password"
               autoCorrect="off"
               name="password"
-              disabled={isLoading}
-              //{...register("email")}
             />
-            {/* {errors?.email && (
-              <p className="px-1 text-xs text-red-600">
-                {errors.email.message}
-              </p>
-            )} */}
             <div className="text-sm text-orange-593500 justify-self-end font-medium">
               forgot password
             </div>
           </div>
 
-          <button
-            className="my-0 mx-auto w-2/5 inline-flex w-full items-center justify-center rounded-full bg-orange-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-[#24292F]/90 focus:outline-none focus:ring-4 focus:ring-[#24292F]/50 disabled:opacity-50 dark:hover:bg-[#050708]/30 dark:focus:ring-slate-500"
-            disabled={isLoading}
-          >
-            {isLoading && (
+          <button className="my-0 mx-auto w-2/5 inline-flex w-full items-center justify-center rounded-full bg-orange-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-[#24292F]/90 focus:outline-none focus:ring-4 focus:ring-[#24292F]/50 disabled:opacity-50 dark:hover:bg-[#050708]/30 dark:focus:ring-slate-500">
+            {/* {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
+            )} */}
             Sign In
           </button>
         </div>
