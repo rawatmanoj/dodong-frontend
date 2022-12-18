@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import dodongLogo from "../../public/images/common/dodong-logo.svg";
 import { AiOutlineHeart, AiOutlineShoppingCart } from "react-icons/ai";
@@ -9,6 +9,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import Link from "next/link";
 
 const Header = () => {
+  const [isLoggedIn, setLoggedIn] = useState(localStorage.getItem("token"));
   const stats = [
     {
       label: "Posts",
@@ -25,22 +26,26 @@ const Header = () => {
   ];
 
   return (
-    <header className="justify-center sticky bg-white z-10 top-0 my-2 px-3 py-2 w-full">
+    <header className="justify-center sticky bg-white z-10 top-0 my-2 px-3 py-2">
       <div className="flex justify-between">
-        <div>
-          <div className="flex pr-10">
-            <Image src={dodongLogo} alt="Dodong logo" className="h-12 w-10" />
-            <span className="my-auto text-center font-bold text-2xl mx-2">
-              DoDong
-            </span>
+        <Link href="/">
+          <div>
+            <div className="flex pr-1">
+              <Image src={dodongLogo} alt="Dodong" className="h-12 w-10" />
+              <span className="my-auto text-center font-bold text-lg md:text-2xl mx-2">
+                DoDong
+              </span>
+            </div>
+            <p className="text-center m-auto italic text-xs md:text-sm">
+              Go online Do dong
+            </p>
           </div>
-          <p className="text-center m-auto italic text-sm">Go online Do dong</p>
-        </div>
+        </Link>
 
         <div className="flex-1 my-auto align-middle">
           <div className="flex justify-between my-auto">
             <div className="flex items-center">
-              <div className="mx-2">
+              <div className="hidden md:block mx-2">
                 <AiOutlineShoppingCart className="text-2xl text-orange-500" />
               </div>
               <div className="flex flex-col mx-2">
@@ -53,29 +58,31 @@ const Header = () => {
               </div>
             </div>
 
-            <div className="flex items-center">
-              <div className="flex flex-col mx-4 my-auto">
-                <div className="flex bg-orange-50 my-auto justify-between text-sm text-center border border-orange-500 py-2.5 px-3 rounded-full truncate">
-                  <input
-                    className="pr-5 px-2 bg-orange-50 text-gray-800 font-semibold focus:outline-none outline-none"
-                    placeholder="Search here"
-                  />
+            <div className="flex items-center px-2">
+              {isLoggedIn && (
+                <div className="hidden md:flex flex-col mx-4 my-auto">
+                  <div className="flex bg-orange-50 my-auto justify-between text-sm text-center border border-orange-500 py-2.5 px-3 rounded-full truncate">
+                    <input
+                      className="pr-5 px-2 bg-orange-50 text-gray-800 font-semibold focus:outline-none outline-none"
+                      placeholder="Search here"
+                    />
 
-                  <button
-                    className="px-2"
-                    onClick={() => {
-                      console.log("Searching...");
-                    }}
-                  >
-                    <BsSearch className="text-trending-icon text-lg my-auto cursor-pointer" />
-                  </button>
+                    <button
+                      className="px-2"
+                      onClick={() => {
+                        console.log("Searching...");
+                      }}
+                    >
+                      <BsSearch className="text-trending-icon text-lg my-auto cursor-pointer" />
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* add state for login  */}
 
-              {false ? (
-                <div className="flex justify-between">
+              {isLoggedIn ? (
+                <div className="hidden lg:flex justify-between">
                   {stats.map((stat, k) => (
                     <div
                       key={`stat_${k}`}
@@ -102,15 +109,15 @@ const Header = () => {
                 </div>
               ) : (
                 <div className="flex justify-between">
-                  <div className="flex flex-col mx-4 my-auto">
+                  <div className="flex flex-col lg:mx-4 my-auto">
                     <Link href={"/login"}>
-                      <div className="text-sm font-bold text-center text-white bg-orange-500 py-2.5 px-3 rounded-full truncate">
+                      <div className="text-sm font-bold text-center text-white bg-orange-500 py-2.5 px-2 md:px-3 rounded-full truncate">
                         Login to Start
                       </div>
                     </Link>
                   </div>
 
-                  <div className="flex flex-col ml-4 my-auto">
+                  <div className="hidden lg:flex flex-col lg:ml-4 my-auto">
                     <div className="text-sm font-bold text-center truncate">
                       <GiHamburgerMenu className="text-xl text-orange-500" />
                     </div>
