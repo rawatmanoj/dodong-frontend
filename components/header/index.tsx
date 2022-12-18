@@ -7,9 +7,11 @@ import { BiChevronDown } from "react-icons/bi";
 import { BsSearch } from "react-icons/bs";
 import { GiHamburgerMenu } from "react-icons/gi";
 import Link from "next/link";
+import { useSelector } from "react-redux";
 
 const Header = () => {
-  const [isLoggedIn, setLoggedIn] = useState(localStorage.getItem("token"));
+  const { saveTokenReducer }: any = useSelector((state) => state);
+
   const stats = [
     {
       label: "Posts",
@@ -59,7 +61,7 @@ const Header = () => {
             </div>
 
             <div className="flex items-center px-2">
-              {isLoggedIn && (
+              {saveTokenReducer?.token && (
                 <div className="hidden md:flex flex-col mx-4 my-auto">
                   <div className="flex bg-orange-50 my-auto justify-between text-sm text-center border border-orange-500 py-2.5 px-3 rounded-full truncate">
                     <input
@@ -81,7 +83,7 @@ const Header = () => {
 
               {/* add state for login  */}
 
-              {isLoggedIn ? (
+              {saveTokenReducer?.token ? (
                 <div className="hidden lg:flex justify-between">
                   {stats.map((stat, k) => (
                     <div
