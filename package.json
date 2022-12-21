@@ -28,7 +28,8 @@
     "react-redux": "^8.0.5",
     "tailwind-merge": "^1.8.0",
     "typescript": "4.9.3",
-    "zod": "^3.19.1"
+    "zod": "^3.19.1",
+    "zod-validation-error": "^0.2.2"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.13",

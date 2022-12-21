@@ -5,6 +5,15 @@ export const userSignInSchema = z.object({
   password: z.string(),
 })
 
+export const personalProfileSchema = z.object({
+  occupation: z.string().optional(),
+  company: z.string().optional(),
+  jobLocation: z.string().optional(),
+  phoneNumber: z.string().optional(),
+  brandDetails: z.string().optional(),
+  other: z.string().optional(),
+})
+
 export const userSignUpSchema = z.object({
   email: z.string({required_error: "Email is required",}).email(),
   password: z.string(),

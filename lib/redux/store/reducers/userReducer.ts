@@ -1,15 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import { UserType } from '@/components/post/types'
 
-export interface CounterState {
-  token: string
+export interface UserState {
+  token: string,
+  user: UserType | null
 }
 
-const initialState: CounterState = {
+const initialState: UserState = {
   token: "",
+  user:null
 }
 
-export const saveTokenReducer = createSlice({
+export const userReducer = createSlice({
   name: 'counter',
   initialState,
   reducers: {
@@ -21,16 +24,17 @@ export const saveTokenReducer = createSlice({
       state.token = action.payload
     },
     deleteToken: (state) => {
-        // Redux Toolkit allows us to write "mutating" logic in reducers. It
-        // doesn't actually mutate the state because it uses the Immer library,
-        // which detects changes to a "draft state" and produces a brand new
-        // immutable state based off those changes
-        state.token = ""
+        state.token = "";
+        state.user = null;
+      },
+    saveUser: (state,action: PayloadAction<UserType>) => {
+      console.log(action.payload,"action,payload")
+        state.user = action.payload
       },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { saveToken,deleteToken } = saveTokenReducer.actions
+export const { saveToken,deleteToken,saveUser } = userReducer.actions
 
-export default saveTokenReducer.reducer
+export default userReducer.reducer

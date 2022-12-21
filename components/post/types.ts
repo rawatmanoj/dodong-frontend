@@ -19,4 +19,10 @@ type PostProps = {
   liked: boolean;
 };
 
-export type { PostProps };
+type UserType = {
+email:string
+id: number,
+phoneNumber:number,
+}
+
+export type { PostProps ,UserType};

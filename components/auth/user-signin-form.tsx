@@ -1,21 +1,18 @@
 "use client";
 
-import * as React from "react";
-import * as z from "zod";
+import React, { ReactElement, useState } from "react";
+import z, { ZodError } from "zod";
 import toast from "react-hot-toast";
-import { Icons } from "@/components/icons";
-import { ZodError } from "zod";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { userSignInSchema } from "@/lib/validations/auth";
 import { postRequest } from "@/lib/networkHelper";
 import { Urls } from "@/lib/apiConstants";
 import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  deleteToken,
-  saveToken,
-} from "@/lib/redux/store/reducers/saveTokenReducer";
+import { useDispatch } from "react-redux";
+import { saveToken, saveUser } from "@/lib/redux/store/reducers/userReducer";
+import { Icons } from "../icons";
+import { fromZodError } from "zod-validation-error";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -29,9 +26,15 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       return postRequest(Urls.login, data);
     },
     onSuccess: (data) => {
-      console.log(data, "returned data");
-      localStorage.setItem("token", data.data.Authorization);
+      console.log(data.data.data.email, "returned data");
       dispatch(saveToken(data.data.Authorization));
+      dispatch(
+        saveUser({
+          id: data.data.data.id,
+          email: data.data.data.email,
+          phoneNumber: data.data.data.phoneNumber,
+        })
+      );
       router.push("/");
     },
 
@@ -41,8 +44,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         return toast(error.response?.data.message);
       }
       if (error instanceof ZodError) {
-        console.log(error.flatten(), "error");
-        return toast("Please valid data");
+        console.log(fromZodError(error));
+        return toast("Please enter valid data");
       }
     },
   });
@@ -63,14 +66,14 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       const isValidData = userSignInSchema.parse(data);
       mutation.mutate(isValidData);
     } catch (error: any) {
-      console.log(error);
-      // console.log((error as ZodError).format())
-      // error.flatten().formErrors.length > 0 && toast(error.flatten().formErrors[0])
+      if (error instanceof ZodError) {
+        const validationError = fromZodError(error);
+        return toast(validationError.message);
+      }
     }
   };
 
   return (
-    // <div className={cn("grid gap-6 mt-10", className)} {...props}>
     <div className="grid gap-6">
       <form onSubmit={handleSubmit}>
         <h5 className="text-orange-593500 text-sm font-medium">
@@ -104,11 +107,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               forgot password
             </div>
           </div>
-
           <button className="my-0 mx-auto w-2/5 inline-flex w-full items-center justify-center rounded-full bg-orange-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-[#24292F]/90 focus:outline-none focus:ring-4 focus:ring-[#24292F]/50 disabled:opacity-50 dark:hover:bg-[#050708]/30 dark:focus:ring-slate-500">
-            {/* {isLoading && (
+            {mutation.isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )} */}
+            )}
             Sign In
           </button>
         </div>
