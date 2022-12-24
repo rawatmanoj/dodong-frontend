@@ -34,9 +34,9 @@ export const postRequest = (url:string,data:any)=>{
             method:"post",
             url,
             data,
-            headers:{
-                "authorization":`Bearer ${getToken()}`
-            }
+            // headers:{
+            //     "authorization":`Bearer ${getToken()}`
+            // }
         })
 }
 export const getRequest = (url:string)=>{

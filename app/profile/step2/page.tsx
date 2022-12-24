@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import manSample from "@/images/profile/profile-man-sample.jpg";
 import sharePhotos from "@/images/profile/sharePhotos.svg";
@@ -8,7 +8,10 @@ import squareProfile from "@/images/profile/square-profile.svg";
 import { Roboto } from "@next/font/google";
 import { toast } from "react-hot-toast";
 import axios from "axios";
-import { personalProfileSchema } from "@/lib/validations/auth";
+import {
+  personalProfileSchema,
+  professionalProfileSchema,
+} from "@/lib/validations/auth";
 import { useMutation } from "@tanstack/react-query";
 import z, { ZodError } from "zod";
 import { postRequest } from "@/lib/networkHelper";
@@ -16,20 +19,30 @@ import { Urls } from "@/lib/apiConstants";
 import { fromZodError } from "zod-validation-error";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/redux/store/store";
+import { cn } from "@/lib/utils";
+import PersonalProfile from "@/components/profile/Personal";
+import ProfessionalProfile from "@/components/profile/Professional";
 const roboto = Roboto({ weight: "500" });
 
 type personalProfileSchema = z.infer<typeof personalProfileSchema>;
+type professionalProfileSchema = z.infer<typeof professionalProfileSchema>;
+
+type MutationType = {
+  data: personalProfileSchema | professionalProfileSchema;
+  type: string;
+};
 
 export default function Step1() {
-  const user = useSelector((state: RootState) => state.userReducer);
-  console.log(user);
+  const user = useSelector((state: RootState) => state.user);
+  const [tab, setTab] = useState<boolean>(true);
+  //   console.log(user);
   const mutation = useMutation({
-    mutationFn: (data: personalProfileSchema) => {
-      console.log(data);
-      return postRequest(Urls.personalProfile, data);
+    mutationFn: ({ data, type }: MutationType) => {
+      console.log(data, type);
+      return postRequest(Urls.professionalProfile, data);
     },
     onSuccess: (data) => {
-      console.log(data, "dataaaaaa");
+      return toast("profile updated successfully");
     },
 
     onError: (error: any) => {
@@ -44,7 +57,9 @@ export default function Step1() {
     },
   });
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): any => {
+  const handleSubmitProfessional = (
+    event: React.FormEvent<HTMLFormElement>
+  ): void => {
     event.preventDefault();
     try {
       const data = {
@@ -54,18 +69,51 @@ export default function Step1() {
         phoneNumber: (event.target as HTMLFormElement).phoneNumber.value,
         brandDetails: (event.target as HTMLFormElement).brandDetails.value,
         other: (event.target as HTMLFormElement).other.value,
+        userId: user?.id,
+      };
+      const isValidData = professionalProfileSchema.parse(data);
+      console.log(isValidData, "yo");
+      mutation.mutate({ data: isValidData, type: "professional" });
+    } catch (error: any) {
+      if (error instanceof ZodError) {
+        const validationError = fromZodError(error);
+        console.log(validationError);
+        toast(validationError.message);
+      }
+      console.log(error);
+    }
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+    event.preventDefault();
+    try {
+      const data = {
+        userId: user?.id,
+        aboutMe: (event.target as HTMLFormElement).aboutme.value,
+        name: (event.target as HTMLFormElement).names.value,
+        displayName: (event.target as HTMLFormElement).displayName.value,
+        dob: new Date((event.target as HTMLFormElement).dob.value),
+        occupation: (event.target as HTMLFormElement).occupation.value,
+        idDetails: (event.target as HTMLFormElement).idDetails.value,
+        facebookURL: (event.target as HTMLFormElement).facebookURL.value,
+        linkedInURL: (event.target as HTMLFormElement).linkedInURL.value,
+        twitterHandle: (event.target as HTMLFormElement).twitterHandle.value,
       };
       const isValidData = personalProfileSchema.parse(data);
-      console.log(isValidData, "yo");
-      mutation.mutate(isValidData);
+      console.log(data, "yo");
+      mutation.mutate({ data: isValidData, type: "personal" });
     } catch (error: any) {
       if (error instanceof ZodError) {
         console.log(error);
         const validationError = fromZodError(error);
-        return toast(validationError.message);
+        toast(validationError.message);
       }
       console.log(error);
     }
+  };
+
+  const handleTab = (val: boolean): void => {
+    setTab(val);
   };
 
   return (
@@ -99,89 +147,30 @@ export default function Step1() {
         className={`mt-10 flex flex-col justify-center items-center  w-2/5 `}
       >
         <header className="flex justify-around w-full mb-10">
-          <div>
+          <div
+            onClick={() => {
+              handleTab(false);
+            }}
+          >
             <button>Personal</button>
-            <div className="h-1 w-15 bg-orange-500" />
+            <div className={cn("h-1 w-15 ", !tab && "bg-orange-500")} />
           </div>
-          <div>
+          <div
+            onClick={() => {
+              handleTab(true);
+            }}
+          >
             <button>Professional</button>
-            <div
-            // className='h-1 w-18 bg-orange-500'
-            />
+            <div className={cn("h-1 w-18", tab && "bg-orange-500")} />
           </div>
         </header>
-        <form
-          id="my-form"
-          onSubmit={handleSubmit}
-          className=" w-full  flex flex-col justify-between h-96 text-orange-593500 font-semibold"
-        >
-          <div className="flex flex-col">
-            <label>Occupation Type</label>
-            <input
-              placeholder="occupation"
-              className="bg-transparent outline-none font-normal"
-              id="occupation"
-              type="text"
-              name="occupation"
-            />
-            <hr />
-          </div>
-          <div className="flex flex-col">
-            <label>Company Name</label>
-            <input
-              placeholder="Company"
-              className="bg-transparent outline-none font-normal"
-              id="company"
-              type="text"
-              name="company"
-            />
-            <hr />
-          </div>
-          <div className="flex flex-col">
-            <label>Job Location</label>
-            <input
-              placeholder="Job Location"
-              className="bg-transparent outline-none font-normal"
-              id="jobLocation"
-              type="text"
-              name="jobLocation"
-            />
-            <hr />
-          </div>
-          <div className="flex flex-col">
-            <label>Phone number</label>
-            <input
-              placeholder="phone number"
-              className="bg-transparent outline-none font-normal"
-              id="phoneNumber"
-              type="number"
-              name="phoneNumber"
-            />
-            <hr />
-          </div>
-          <div className="flex flex-col text-color-orange-593500">
-            <label className="">Brand Details</label>
-            <input
-              placeholder="Brand Details"
-              className="bg-transparent outline-none font-normal"
-              id="brandDetails"
-              type="text"
-              name="brandDetails"
-            />
-            <hr />
-          </div>
-          <div className="flex flex-col text-color-orange-593500">
-            <label className="">Other</label>
-            <input
-              placeholder="Other"
-              className="bg-transparent outline-none font-normal"
-              id="other"
-              type="text"
-              name="other"
-            />
-            <hr />
-          </div>
-        </form>
+        {tab ? (
+          <ProfessionalProfile
+            handleSubmitProfessional={handleSubmitProfessional}
+          />
+        ) : (
+          <PersonalProfile handleSubmit={handleSubmit} />
+        )}
       </main>
     </section>
   );
