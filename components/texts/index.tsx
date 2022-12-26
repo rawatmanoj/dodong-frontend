@@ -2,11 +2,16 @@ import React from "react";
 
 type HeadingProps = {
   title: string;
-  subtitle: string | null;
+  icon: React.ReactNode;
 };
 
 const Heading = (props: HeadingProps) => {
-  return <div className="text-lg font-bold">{props.title}</div>;
+  return (
+    <div className="flex">
+      <div className="mr-2 my-auto">{props.icon}</div>
+      <div className="text-lg font-extrabold">{props.title}</div>
+    </div>
+  );
 };
 
 const SubHeading = (props: HeadingProps) => {
