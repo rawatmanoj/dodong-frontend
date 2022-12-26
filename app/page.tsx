@@ -1,9 +1,10 @@
 "use client";
-import React from "react";
+
+import React, { useState } from "react";
 
 import Post from "@/components/post";
 
-import { MdLocationOn } from "react-icons/md";
+import { MdLocationOn, MdOutlineWifiTethering } from "react-icons/md";
 import { FiHeart } from "react-icons/fi";
 import { TbMessage, TbLink } from "react-icons/tb";
 import {
@@ -15,11 +16,21 @@ import Image from "next/image";
 import { Heading } from "@/components/texts";
 import Link from "next/link";
 import Statuses from "@/components/status";
+import CreatePost from "@/components/post/create";
 import { PostProps } from "@/components/post/types";
 import dynamic from "next/dynamic";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getRequest, postRequest } from "@/lib/networkHelper";
+import { Urls } from "@/lib/apiConstants";
+import axios from "axios";
+import { toast } from "@/ui/toast";
+import { ZodError } from "zod";
+import { AiTwotoneSwitcher } from "react-icons/ai";
+import { BsPlayBtn } from "react-icons/bs";
+import Modal from "@/ui/modal";
 
 const DynamicHeader = dynamic(() => import("@/components/header"), {
-  ssr: false,
+  ssr: true,
 });
 
 type TrendingProps = {
@@ -44,6 +55,19 @@ type LocalMarketProps = {
 };
 
 function HomePage() {
+  const [loading, setLoading] = useState(true);
+
+  const {
+    data,
+    isLoading,
+  }: {
+    data: PostProps[] | undefined;
+    isLoading: boolean;
+  } = useQuery({
+    queryKey: ["posts"],
+    queryFn: () => getRequest(Urls.posts),
+  });
+
   const _renderTrendingPost = (post: TrendingProps): JSX.Element => {
     return (
       <div className="my-5 bg-trending-background rounded-md" id={post.id}>
@@ -93,10 +117,11 @@ function HomePage() {
       <div className="my-5 px-2 rounded-md mx-auto" id={post.id}>
         <Image
           src={post.imageURL}
-          height={200}
-          width={200}
+          width={400}
+          height={400}
           alt="data.post image"
-          className="rounded-xl"
+          className="rounded-xl w-full"
+          style={{ width: "100%" }}
         />
         <div className="text-gray-800 m-2">
           <div className="text-sm font-bold truncate">{post.name}</div>
@@ -113,6 +138,10 @@ function HomePage() {
   return (
     <div>
       <DynamicHeader />
+      <Modal>
+        <CreatePost />
+      </Modal>
+
       <div className="mx-auto align-middle">
         <div className="grid md:flex px-2 justify-center mx-auto">
           <section
@@ -132,6 +161,8 @@ function HomePage() {
           >
             <Statuses />
             <div className="flex-1">
+              {/* {isLoading && <div>Loading...</div>} */}
+
               {POSTS_CONTENT.map((post: PostProps, k: number) => (
                 <Post key={k} post={post} />
               ))}
@@ -140,9 +171,12 @@ function HomePage() {
 
           <section
             id="local-market"
-            className="md:block lg:h-min lg:sticky lg:overflow-y-scroll lg:top-20 xl:max-w-xs xs:hidden px-2"
+            className="md:block lg:h-min lg:sticky lg:overflow-y-scroll lg:top-20 max-w-sm xs:hidden px-2"
           >
-            <div style={{ height: "90vh" }}>
+            <div className="flex-1 w-80" style={{ height: "90vh" }}>
+              <div className="cursor-pointer bg-orange-500 rounded-full px-3 text-center text-white py-3 text-sm font-bold my-4">
+                Post / Share
+              </div>
               <Heading title="Local Market" icon={<></>} />
               {LOCAL_MARKET_CONTENT.map((post: LocalMarketProps) =>
                 _renderLocalMarketProduct(post)

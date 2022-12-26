@@ -161,4 +161,5 @@ const Post = ({ post }: { post: PostProps }): JSX.Element => {
     </div>
   );
 };
+
 export default Post;
