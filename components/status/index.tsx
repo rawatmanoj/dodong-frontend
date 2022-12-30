@@ -35,7 +35,7 @@ const Statuses = () => {
   ];
 
   return (
-    <div className="relative overflow-auto my-2 px-3">
+    <div className="overflow-auto my-2 px-3">
       <div className="flex flex-nowrap gap-4 text-sm font-bold leading-6 rounded-lg">
         {stats.map((stat, k) => (
           <div key={k} className="flex-none my-5 py-3 last:pr-8">

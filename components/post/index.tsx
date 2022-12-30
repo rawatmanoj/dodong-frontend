@@ -7,6 +7,7 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { BiBookmark } from "react-icons/bi";
 import { BsArrowUpRightCircle } from "react-icons/bs";
 import { HiArrowLongRight } from "react-icons/hi2";
+import { BsShop } from "react-icons/bs";
 import { MdLocationOn } from "react-icons/md";
 import { SlOptionsVertical } from "react-icons/sl";
 import { TbMessage } from "react-icons/tb";
@@ -134,17 +135,27 @@ const Post = ({ post }: { post: PostProps }): JSX.Element => {
         />
 
         {/* likes and comments */}
-        <div className="absolute right-0 bottom-0 text-white">
-          <div className="flex justify-between my-auto px-4 py-3">
-            {/* likes */}
-            {postActions.map((action, k) => (
-              <div key={`action_${k}`} className="flex flex-col mx-2 lg:mx-4">
-                <div className="text-sm flex justify-center font-bold text-center">
-                  {action.icon}
-                  <span className="pl-2">{action.value}</span>
+        <div className="bg-black-gradient absolute bottom-0 text-white w-full rounded-xl">
+          <div className="flex justify-between">
+            <div className="flex justify-between my-auto px-4 py-3">
+              <Link href={"/product" + post.shopURL}>
+                <button className="bg-orange-500 flex text-white py-2 px-3 text-sm rounded-full">
+                  <BsShop className="text-xl my-auto mr-2" />
+                  Know more
+                </button>
+              </Link>
+            </div>
+            <div className="flex justify-between my-auto px-4 py-3">
+              {/* likes */}
+              {postActions.map((action, k) => (
+                <div key={`action_${k}`} className="flex flex-col mx-2 lg:mx-4">
+                  <div className="text-sm flex justify-center font-bold text-center">
+                    {action.icon}
+                    <span className="pl-2">{action.value}</span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>
