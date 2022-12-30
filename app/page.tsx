@@ -4,7 +4,7 @@ import React, { useState } from "react";
 
 import Post from "@/components/post";
 
-import { MdLocationOn, MdOutlineWifiTethering } from "react-icons/md";
+import { MdLocationOn } from "react-icons/md";
 import { FiHeart } from "react-icons/fi";
 import { TbMessage, TbLink } from "react-icons/tb";
 import {
@@ -18,20 +18,12 @@ import Link from "next/link";
 import Statuses from "@/components/status";
 import CreatePost from "@/components/post/create";
 import { PostProps } from "@/components/post/types";
-import dynamic from "next/dynamic";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { getRequest, postRequest } from "@/lib/networkHelper";
+import { useQuery } from "@tanstack/react-query";
+import { getRequest } from "@/lib/networkHelper";
 import { Urls } from "@/lib/apiConstants";
-import axios from "axios";
-import { toast } from "@/ui/toast";
-import { ZodError } from "zod";
-import { AiTwotoneSwitcher } from "react-icons/ai";
-import { BsPlayBtn } from "react-icons/bs";
-import Modal from "@/ui/modal";
+import Header from "@/components/header";
 
-const DynamicHeader = dynamic(() => import("@/components/header"), {
-  ssr: true,
-});
+import Modal from "@/ui/modal";
 
 type TrendingProps = {
   name: string;
@@ -56,6 +48,7 @@ type LocalMarketProps = {
 
 function HomePage() {
   const [loading, setLoading] = useState(true);
+  const [openCreatePostModal, setCreatePostModal] = useState(false);
 
   const {
     data,
@@ -65,7 +58,7 @@ function HomePage() {
     isLoading: boolean;
   } = useQuery({
     queryKey: ["posts"],
-    queryFn: () => getRequest(Urls.posts),
+    queryFn: () => getRequest(Urls.collection),
   });
 
   const _renderTrendingPost = (post: TrendingProps): JSX.Element => {
@@ -137,10 +130,18 @@ function HomePage() {
 
   return (
     <div>
-      <DynamicHeader />
-      <Modal>
-        <CreatePost />
-      </Modal>
+      <Header />
+
+      {openCreatePostModal ? (
+        <Modal
+          open={openCreatePostModal}
+          onClose={() => {
+            console.log("close");
+          }}
+        >
+          <CreatePost />
+        </Modal>
+      ) : null}
 
       <div className="mx-auto align-middle">
         <div className="grid md:flex px-2 justify-center mx-auto">
@@ -174,7 +175,13 @@ function HomePage() {
             className="md:block lg:h-min lg:sticky lg:overflow-y-scroll lg:top-20 max-w-sm xs:hidden px-2"
           >
             <div className="flex-1 w-80" style={{ height: "90vh" }}>
-              <div className="cursor-pointer bg-orange-500 rounded-full px-3 text-center text-white py-3 text-sm font-bold my-4">
+              <div
+                onClick={() => {
+                  console.log("clicked");
+                  setCreatePostModal(true);
+                }}
+                className="cursor-pointer bg-orange-500 rounded-full px-3 text-center text-white py-3 text-sm font-bold my-4"
+              >
                 Post / Share
               </div>
               <Heading title="Local Market" icon={<></>} />

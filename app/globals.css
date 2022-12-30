@@ -10,12 +10,12 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
 }
 
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
 }
 
@@ -48,4 +48,12 @@ a {
 
 .local-market-container {
   max-width: 16rem;
+}
+
+.bg-gradient {
+  background: linear-gradient(180deg, #fff5e6 0%, #ffffff 100%);
+}
+
+.bg-black-gradient {
+  background: linear-gradient(180deg, #00000000 0%, #2e2e2e 100%);
 }

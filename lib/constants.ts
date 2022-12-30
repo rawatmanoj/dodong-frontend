@@ -106,7 +106,7 @@ const POSTS_CONTENT = [
       distance: "3.2 km",
       id: "23423",
     },
-    shopURL: "/post/23423",
+    shopURL: "/23423",
     post: {
       imageURL: "https://picsum.photos/800/400",
       description:
@@ -127,7 +127,7 @@ const POSTS_CONTENT = [
       distance: "3.2 km",
       id: "23423",
     },
-    shopURL: "/post/23423",
+    shopURL: "/23423",
     post: {
       imageURL: "https://picsum.photos/800/400",
       description:
@@ -149,7 +149,7 @@ const POSTS_CONTENT = [
       distance: "3.2 km",
       id: "23423",
     },
-    shopURL: "/post/23423",
+    shopURL: "/23423",
     post: {
       imageURL: "https://picsum.photos/800/400",
       description:
@@ -170,7 +170,7 @@ const POSTS_CONTENT = [
       distance: "3.2 km",
       id: "23423",
     },
-    shopURL: "/post/23423",
+    shopURL: "/23423",
     post: {
       imageURL: "https://picsum.photos/800/400",
       description:
@@ -191,7 +191,7 @@ const POSTS_CONTENT = [
       distance: "3.2 km",
       id: "23423",
     },
-    shopURL: "/post/23423",
+    shopURL: "/23423",
     post: {
       imageURL: "https://picsum.photos/800/400",
       description:

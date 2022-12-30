@@ -2,7 +2,7 @@
 import { useRef, useState } from "react";
 
 export default function Modal(props: any) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(props.open || false);
 
   const hideRef = useRef(true);
 
@@ -12,6 +12,9 @@ export default function Modal(props: any) {
     setOpen(false);
     setTimeout(() => {
       hideRef.current = false;
+      if (props?.onClose) {
+        props.onClose();
+      }
     }, 300);
   };
 
@@ -22,7 +25,9 @@ export default function Modal(props: any) {
   return (
     <div
       className="relative"
-      style={{ zIndex: 1000 }}
+      style={{
+        zIndex: 1000,
+      }}
       aria-labelledby="modal-title"
       role="dialog"
       aria-modal="true"
