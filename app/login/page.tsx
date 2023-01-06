@@ -1,9 +1,13 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import dodongLogo from "../../public/images/common/dodong-logo.svg";
 import { UserAuthForm } from "@/components/auth/user-signin-form";
 import { Icons } from "@/components/icons";
 import Link from "next/link";
+import FacebookButton from "@/components/auth/facebook";
+import { FacebookProvider } from "react-facebook";
+import { FcGoogle } from "react-icons/fc";
 
 export default function Login() {
   return (
@@ -32,30 +36,24 @@ export default function Login() {
             <span className="px-2 text-slate-500">Or login with</span>
           </div>
         </div>
-        <div className="flex justify-between">
+        <div className="flex gap-3 justify-evenly">
           <button
             type="button"
-            className="w-3/12 inline-flex w-full items-center justify-center rounded-full border bg-white px-5 py-2.5 text-center text-sm font-medium text-black hover:bg-slate-100 focus:outline-none focus:ring-4 focus:ring-[#24292F]/50 disabled:opacity-50 dark:hover:bg-[#050708]/30 dark:focus:ring-slate-500"
+            className="inline-flex w-full items-center justify-center rounded-full border bg-white px-5 py-2.5 text-center text-sm font-medium text-black hover:bg-slate-100 focus:outline-none focus:ring-4 focus:ring-[#24292F]/50 disabled:opacity-50 dark:hover:bg-[#050708]/30 dark:focus:ring-slate-500"
             //onClick={() => signIn("github")}
             //disabled={isLoading}
           >
-            <Icons.google size={30} />
+            <FcGoogle className="text-3xl" />
           </button>
           <button
             type="button"
-            className="w-3/12 inline-flex w-full items-center justify-center rounded-full border bg-white px-5 py-2.5 text-center text-sm font-medium text-black hover:bg-slate-100 focus:outline-none focus:ring-4 focus:ring-[#24292F]/50 disabled:opacity-50 dark:hover:bg-[#050708]/30 dark:focus:ring-slate-500"
+            className="inline-flex w-full items-center justify-center rounded-full border bg-white px-5 py-2.5 text-center text-sm font-medium text-black hover:bg-slate-100 focus:outline-none focus:ring-4 focus:ring-[#24292F]/50 disabled:opacity-50 dark:hover:bg-[#050708]/30 dark:focus:ring-slate-500"
             //onClick={() => signIn("github")}
             //disabled={isLoading}
           >
-            <Icons.fb size={30} />
-          </button>
-          <button
-            type="button"
-            className="w-3/12 inline-flex w-full items-center justify-center rounded-full border bg-white px-5 py-2.5 text-center text-sm font-medium text-black hover:bg-slate-100 focus:outline-none focus:ring-4 focus:ring-[#24292F]/50 disabled:opacity-50 dark:hover:bg-[#050708]/30 dark:focus:ring-slate-500"
-            //onClick={() => signIn("github")}
-            //disabled={isLoading}
-          >
-            <Icons.twitter size={30} />
+            <FacebookProvider appId="708703114198422">
+              <FacebookButton />
+            </FacebookProvider>
           </button>
         </div>
         <div className="mt-20 place-self-center">
