@@ -5,9 +5,13 @@ import dodongLogo from "../../public/images/common/dodong-logo.svg";
 import { UserAuthForm } from "@/components/auth/user-signin-form";
 import { Icons } from "@/components/icons";
 import Link from "next/link";
-import FacebookButton from "@/components/auth/facebook";
 import { FacebookProvider } from "react-facebook";
 import { FcGoogle } from "react-icons/fc";
+import dynamic from "next/dynamic";
+
+const FacebookButton = dynamic(() => import("@/components/auth/facebook"), {
+  ssr: false,
+});
 
 export default function Login() {
   return (
