@@ -11,9 +11,9 @@ function initFacebookSdk() {
     window.fbAsyncInit = function () {
       window.FB.init({
         appId: facebookAppId,
-        cookie: true,
+        autoLogAppEvents: true,
         xfbml: true,
-        version: "v8.0",
+        version: "v15.0",
       });
 
       // auto authenticate with the api if already logged in with facebook
@@ -21,7 +21,10 @@ function initFacebookSdk() {
         if (authResponse) {
           accountService
             .apiAuthenticate(authResponse.accessToken)
-            .then(resolve);
+            .then((res) => {
+              console.log("res", res);
+              resolve();
+            });
         } else {
           resolve();
         }
