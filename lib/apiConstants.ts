@@ -1,6 +1,6 @@
 export const Urls = {
-  // base_url: "http://api.dodong.in:3000/",
-  base_url:"http://localhost:4000/",
+  base_url: "http://api.dodong.in:3000/",
+  // base_url:"http://localhost:4000/",
   signup: "auth/register",
   login: "auth/login",
   personalProfile: "profile/personal",

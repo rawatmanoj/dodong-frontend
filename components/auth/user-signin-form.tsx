@@ -28,6 +28,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     onSuccess: (data) => {
       console.log(data.data.data.email, "returned data");
       dispatch(saveToken(data.data.Authorization));
+      localStorage.setItem("token", data.data.Authorization);
       dispatch(
         saveUser({
           id: data.data.data.id,

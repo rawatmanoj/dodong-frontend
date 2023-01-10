@@ -10,7 +10,7 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 
 const Header = () => {
-  const { saveTokenReducer }: any = useSelector((state) => state);
+  const saveTokenReducer: any = useSelector((state: any) => state);
 
   const stats = [
     {
@@ -29,6 +29,7 @@ const Header = () => {
 
   return (
     <header className="justify-center sticky bg-white z-10 top-0 my-2 px-3 py-2">
+      {console.log("saveTokenReducer", saveTokenReducer)}
       <div className="flex justify-between">
         <Link href="/">
           <div>

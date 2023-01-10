@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import dodongLogo from "../../public/images/common/dodong-logo.svg";
 import { UserAuthForm } from "@/components/auth/user-signin-form";
@@ -8,12 +8,32 @@ import Link from "next/link";
 import { FacebookProvider } from "react-facebook";
 import { FcGoogle } from "react-icons/fc";
 import dynamic from "next/dynamic";
+import { useSelector } from "react-redux";
 
 const FacebookButton = dynamic(() => import("@/components/auth/facebook"), {
   ssr: false,
 });
 
 export default function Login() {
+  const state = useSelector((state: any) => state.auth);
+
+  useEffect(() => {
+    console.log("state", state);
+  }, []);
+
+  const checkValidToken = async () => {
+    // check if the token is valid
+
+    // if valid, redirect to home page
+    let token = await localStorage.getItem("token");
+
+    if (!token) {
+      return;
+    }
+
+    // if not, redirect to login page
+  };
+
   return (
     <section className="bg-neutral-100 h-screen flex justify-center flex-col items-center">
       <figure className="mb-10">
@@ -55,7 +75,7 @@ export default function Login() {
             //onClick={() => signIn("github")}
             //disabled={isLoading}
           >
-            <FacebookProvider appId="708703114198422">
+            <FacebookProvider appId="724627192289395">
               <FacebookButton />
             </FacebookProvider>
           </button>
