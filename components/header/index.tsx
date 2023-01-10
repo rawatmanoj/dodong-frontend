@@ -10,7 +10,7 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 
 const Header = () => {
-  const { saveTokenReducer }: any = useSelector((state) => state);
+  const saveTokenReducer: any = useSelector((state: any) => state);
 
   const stats = [
     {

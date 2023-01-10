@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { FacebookProvider, LoginButton, useLogin } from "react-facebook";
 import { BsFacebook } from "react-icons/bs";
 
-const facebookAppId = "708703114198422";
+const facebookAppId = "724627192289395";
 
 function initFacebookSdk() {
   return new Promise((resolve) => {
